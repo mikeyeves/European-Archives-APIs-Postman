@@ -1,0 +1,1892 @@
+{
+  "info": {
+    "_postman_id": "e1ee1c3d-5983-4a5d-b2b8-d9f5af7da959",
+    "name": "Deutsche Digitale Bibliothek (DDB) API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "German Digital Library API v2 (52 operations from the official OpenAPI) incl. the German Newspaper Portal full-text index. Search endpoints worked without a key at build time; user/favourites endpoints need a bearer token from your DDB account (My DDB → API key).\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi · Docs: https://labs.deutsche-digitale-bibliothek.de/app/ddbapi/"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{ddb_token}}"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "★ Research · Banat / Hungary",
+      "id": "8d0eb014-a6ee-4c91-a8fb-47fb465f23d8",
+      "item": [
+        {
+          "name": "Search all: Beodra",
+          "id": "c25ec0f0-c578-439a-bcfc-3f1d05f9ba4a",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/search/index/search/select?q=Beodra&rows=50",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "search",
+                "index",
+                "search",
+                "select"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "Beodra",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "rows",
+                  "value": "50",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Solr search across all DDB objects. Use Solr syntax."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=(((j.response||{}).docs||[]).map(d=>({id:'<a href=\"https://www.deutsche-digitale-bibliothek.de/item/'+d.id+'\">'+d.id+'</a>',title:d.title||d.label||d.paper_title||'',date:d.publication_date||d.time_fct||d.begin_time||'',provider:d.provider||d.provider_fct||'',place:d.place_fct||d.place_of_distribution||''})));",
+                  "const cols=[\"id\",\"title\",\"date\",\"provider\",\"place\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Newspaper full text: Beodra",
+          "id": "1e2329a4-edbf-4c0c-890d-bb8a25d7750d",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/search/index/newspaper-issues/select?q=plainpagefulltext:Beodra&rows=50",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "search",
+                "index",
+                "newspaper-issues",
+                "select"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "plainpagefulltext:Beodra"
+                },
+                {
+                  "key": "rows",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "German Newspaper Portal full text — includes German-language Banat/Hungarian papers. 64 hits for Beodra at time of building."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=(((j.response||{}).docs||[]).map(d=>({id:'<a href=\"https://www.deutsche-digitale-bibliothek.de/item/'+d.id+'\">'+d.id+'</a>',title:d.title||d.label||d.paper_title||'',date:d.publication_date||d.time_fct||d.begin_time||'',provider:d.provider||d.provider_fct||'',place:d.place_fct||d.place_of_distribution||''})));",
+                  "const cols=[\"id\",\"title\",\"date\",\"provider\",\"place\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Newspaper full text: Barna + Beodra",
+          "id": "f86103e8-7cc9-4f83-ab87-278eaab52d91",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/search/index/newspaper-issues/select?q=plainpagefulltext:Beodra AND plainpagefulltext:Barna&rows=50",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "search",
+                "index",
+                "newspaper-issues",
+                "select"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "plainpagefulltext:Beodra AND plainpagefulltext:Barna",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "rows",
+                  "value": "50",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=(((j.response||{}).docs||[]).map(d=>({id:'<a href=\"https://www.deutsche-digitale-bibliothek.de/item/'+d.id+'\">'+d.id+'</a>',title:d.title||d.label||d.paper_title||'',date:d.publication_date||d.time_fct||d.begin_time||'',provider:d.provider||d.provider_fct||'',place:d.place_fct||d.place_of_distribution||''})));",
+                  "const cols=[\"id\",\"title\",\"date\",\"provider\",\"place\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Newspaper full text: Vértessomló",
+          "id": "b164d97b-ed76-4c6e-b0df-9b609b57a67f",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/search/index/newspaper-issues/select?q=plainpagefulltext:Vertessomlo OR plainpagefulltext:Vértessomló OR plainpagefulltext:\"Vértes-Somló\"&rows=50",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "search",
+                "index",
+                "newspaper-issues",
+                "select"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "plainpagefulltext:Vertessomlo OR plainpagefulltext:Vértessomló OR plainpagefulltext:\"Vértes-Somló\""
+                },
+                {
+                  "key": "rows",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=(((j.response||{}).docs||[]).map(d=>({id:'<a href=\"https://www.deutsche-digitale-bibliothek.de/item/'+d.id+'\">'+d.id+'</a>',title:d.title||d.label||d.paper_title||'',date:d.publication_date||d.time_fct||d.begin_time||'',provider:d.provider||d.provider_fct||'',place:d.place_fct||d.place_of_distribution||''})));",
+                  "const cols=[\"id\",\"title\",\"date\",\"provider\",\"place\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Newspaper full text: Krüpl",
+          "id": "f22d22d1-2927-45fb-bcbd-cc5f581ca949",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/search/index/newspaper-issues/select?q=plainpagefulltext:Krüpl OR plainpagefulltext:Krupl&rows=50",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "search",
+                "index",
+                "newspaper-issues",
+                "select"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "plainpagefulltext:Krüpl OR plainpagefulltext:Krupl"
+                },
+                {
+                  "key": "rows",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=(((j.response||{}).docs||[]).map(d=>({id:'<a href=\"https://www.deutsche-digitale-bibliothek.de/item/'+d.id+'\">'+d.id+'</a>',title:d.title||d.label||d.paper_title||'',date:d.publication_date||d.time_fct||d.begin_time||'',provider:d.provider||d.provider_fct||'',place:d.place_fct||d.place_of_distribution||''})));",
+                  "const cols=[\"id\",\"title\",\"date\",\"provider\",\"place\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Newspaper full text: Beodra, 1900–1915",
+          "id": "5b71fa39-1585-429b-adc5-3d917bcb05ef",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/search/index/newspaper-issues/select?q=plainpagefulltext:{{query}}&fq=publication_date:[1900-01-01T00:00:00Z TO 1915-12-31T23:59:59Z]&rows=50",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "search",
+                "index",
+                "newspaper-issues",
+                "select"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "plainpagefulltext:{{query}}"
+                },
+                {
+                  "key": "fq",
+                  "value": "publication_date:[1900-01-01T00:00:00Z TO 1915-12-31T23:59:59Z]"
+                },
+                {
+                  "key": "rows",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=(((j.response||{}).docs||[]).map(d=>({id:'<a href=\"https://www.deutsche-digitale-bibliothek.de/item/'+d.id+'\">'+d.id+'</a>',title:d.title||d.label||d.paper_title||'',date:d.publication_date||d.time_fct||d.begin_time||'',provider:d.provider||d.provider_fct||'',place:d.place_fct||d.place_of_distribution||''})));",
+                  "const cols=[\"id\",\"title\",\"date\",\"provider\",\"place\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Verified working without an API key at build time (search endpoints)."
+    },
+    {
+      "name": "Favourites (user)",
+      "id": "6f08f1b1-7ff2-4ca8-a763-21bbb4944b87",
+      "item": [
+        {
+          "name": "FA01 · Create bookmark",
+          "id": "1c154ccf-f2a3-43ee-8b7b-06b13fb80580",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/bookmarks",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "bookmarks"
+              ],
+              "query": [
+                {
+                  "key": "folderId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "FA01 · Create bookmark\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FA03 · Retrieve bookmarks",
+          "id": "1441d7d5-8be9-4e02-9008-93b760e3283e",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/bookmarks",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "bookmarks"
+              ],
+              "query": [
+                {
+                  "key": "itemIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "offset",
+                  "value": "-1",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "portal",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "size",
+                  "value": "-1",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "userId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "FA03 · Retrieve bookmarks\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "FA04 · Update bookmark",
+          "id": "4ac8ed59-217e-4f88-bf49-6406e3cdd000",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/bookmarks/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "bookmarks",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "FA04 · Update bookmark\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FA02 · Retrieve bookmark",
+          "id": "b17eafc2-eac6-49f8-954d-5c79fd70ccf5",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/bookmarks/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "bookmarks",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "FA02 · Retrieve bookmark\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "FA05 · Delete bookmark",
+          "id": "4c7fc2a0-cd50-48f2-a9b7-318d253b4a5e",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/bookmarks/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "bookmarks",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "FA05 · Delete bookmark\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "FA15 · Download newspaper page ZIP",
+          "id": "18750872-333e-4ae5-9b6b-cef85d827212",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/download",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "download"
+              ],
+              "query": []
+            },
+            "description": "FA15 · Download newspaper page ZIP\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FA10 · Retrieve folders",
+          "id": "d1c666fa-1036-4a16-a68e-1f17b5880492",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/folders",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "folders"
+              ],
+              "query": [
+                {
+                  "key": "institution",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "offset",
+                  "value": "-1",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "portal",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "size",
+                  "value": "-1",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "title",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "userId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "FA10 · Retrieve folders\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "FA14 · Delete all bookmarks and folders",
+          "id": "9f5f3821-702b-460c-ac8c-c580370a1921",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/folders",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "folders"
+              ],
+              "query": [
+                {
+                  "key": "userId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "FA14 · Delete all bookmarks and folders\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "FA06 · Create folder",
+          "id": "72f80f42-5380-4db2-8bda-0c4dfa9f9ea5",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/folders",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "folders"
+              ],
+              "query": []
+            },
+            "description": "FA06 · Create folder\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FA11 · Update folder",
+          "id": "2e21ef82-c179-4f8f-926a-0487cfc37315",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/folders/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "folders",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "FA11 · Update folder\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FA08 · Retrieve folder",
+          "id": "0058a35b-d9ee-4dc5-8777-ed1d53f8f165",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/folders/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "folders",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "FA08 · Retrieve folder\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "FA12 · Delete folder",
+          "id": "e2ee909b-63c7-422a-9064-f1453b0928c8",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/folders/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "folders",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "FA12 · Delete folder\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "FA09 · Retrieve bookmarks of a folder",
+          "id": "a0bf37b6-c987-41ed-938d-f0a5ec2ea1b3",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/folders/{{id}}/bookmarks",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "folders",
+                "{{id}}",
+                "bookmarks"
+              ],
+              "query": []
+            },
+            "description": "FA09 · Retrieve bookmarks of a folder\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "FA07 · Add bookmark to folder",
+          "id": "bd5dab18-5710-44e2-81b7-6eea6727b479",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/folders/{{id}}/bookmarks",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "folders",
+                "{{id}}",
+                "bookmarks"
+              ],
+              "query": [
+                {
+                  "key": "bookmarkId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "FA07 · Add bookmark to folder\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "FA13 · Delete bookmark from folder",
+          "id": "ae7ff0c2-43f2-413c-b11b-86ddc6b48a0e",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/favourites/folders/{{id}}/bookmarks/{{bookmarkId}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "favourites",
+                "folders",
+                "{{id}}",
+                "bookmarks",
+                "{{bookmarkId}}"
+              ],
+              "query": []
+            },
+            "description": "FA13 · Delete bookmark from folder\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "Institutions",
+      "id": "c5514908-097a-48e3-aeae-2d5c429047ff",
+      "item": [
+        {
+          "name": "IN01 · Get institutions",
+          "id": "b923e3e2-b677-447a-bb2a-a1da977fa839",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/institutions",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "institutions"
+              ],
+              "query": [
+                {
+                  "key": "hasItems",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "sector",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "IN01 · Get institutions\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "IN02 · Get institutions cluster",
+          "id": "e23d06c0-8cb7-454e-84d3-bd6d58eba33b",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/institutions/map",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "institutions",
+                "map"
+              ],
+              "query": [
+                {
+                  "key": "clusterId",
+                  "value": "-1",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "hasItems",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "length",
+                  "value": "-1",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "IN02 · Get institutions cluster\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "Items",
+      "id": "e82002a9-758c-430c-aa26-1b81a634a233",
+      "item": [
+        {
+          "name": "IT01 · Get Aip",
+          "id": "66576f02-eb80-47eb-91d8-94cb2e69bdb7",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "IT01 · Get Aip\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "IT02 · Get binaries",
+          "id": "52c20b33-b68f-4250-8791-6d071da1e38d",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}/binaries",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}",
+                "binaries"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "IT02 · Get binaries\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "IT04 · Get children",
+          "id": "cd907cc2-522b-440a-9c81-dcc39befa299",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}/children",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}",
+                "children"
+              ],
+              "query": [
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "rows",
+                  "value": "-1",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "IT04 · Get children\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "IT10 · Download quote infos for newspaper issue as BIB file",
+          "id": "687289a0-eacf-45be-9a0a-86d9bdc3a25e",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}/citiation",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}",
+                "citiation"
+              ],
+              "query": []
+            },
+            "description": "IT10 · Download quote infos for newspaper issue as BIB file\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "IT06 · Get model",
+          "id": "15dbcfa4-8b13-41cb-9b58-f7ab11ee5240",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}/edm",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}",
+                "edm"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "IT06 · Get model\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "[ IT11 | Get IIIF presentation manifest",
+          "id": "572834d5-4313-43a4-9b06-97b7df0ed153",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}/iiif",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}",
+                "iiif"
+              ],
+              "query": []
+            },
+            "description": "[ IT11 | Get IIIF presentation manifest\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "IT03 · Get parents",
+          "id": "323b5e98-a84e-4c4b-a280-f098dc5598fc",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}/parents",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}",
+                "parents"
+              ],
+              "query": []
+            },
+            "description": "IT03 · Get parents\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "IT05 · Get source",
+          "id": "61e977f0-ea1c-4bcf-9224-16c6a78bb8b9",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}/source",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}",
+                "source"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "IT05 · Get source\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "IT08 · Get source description",
+          "id": "f52d834a-1174-477f-8559-d6d64c42ddbd",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}/source/description",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}",
+                "source",
+                "description"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "IT08 · Get source description\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "IT09 · Get source record",
+          "id": "345ede5d-0ba9-4b47-a711-a388868706d9",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}/source/record",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}",
+                "source",
+                "record"
+              ],
+              "query": []
+            },
+            "description": "IT09 · Get source record\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "IT07 · Get view",
+          "id": "3d308334-e9b3-423f-b305-fafd41a113d4",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/items/{{id}}/view",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "items",
+                "{{id}}",
+                "view"
+              ],
+              "query": [
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "IT07 · Get view\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "Saved searches (user)",
+      "id": "0f37641d-9577-431e-9f0e-4c3827dfc6f9",
+      "item": [
+        {
+          "name": "SS01 · Stores a search",
+          "id": "688f6d57-5286-49bf-968e-de4f0c50a1d7",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/savedsearches",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "savedsearches"
+              ],
+              "query": []
+            },
+            "description": "SS01 · Stores a search\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SS02 · Query searches",
+          "id": "7a30fcef-26c5-4cf1-8e42-6812e61e2f25",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/savedsearches",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "savedsearches"
+              ],
+              "query": [
+                {
+                  "key": "queryString",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "title",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "type",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "SS02 · Query searches\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "SS03 · Update search",
+          "id": "a1ac5ea3-7aa9-4ab6-be4c-76ceebdcaa97",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/savedsearches/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "savedsearches",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "SS03 · Update search\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SS04 · Delete search",
+          "id": "dc101ec9-e171-4d02-9274-eff93d123bc9",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/savedsearches/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "savedsearches",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "SS04 · Delete search\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "Search (Solr)",
+      "id": "ba393946-964a-46f7-99a0-26cd4cf16508",
+      "item": [
+        {
+          "name": "SE02 · Query Solr by POST",
+          "id": "99da69c3-43f8-4e1b-b5d4-7f39f556ed6c",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/search/index/{{collection}}/{{requestHandler}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "search",
+                "index",
+                "{{collection}}",
+                "{{requestHandler}}"
+              ],
+              "query": []
+            },
+            "description": "SE02 · Query Solr by POST\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "SE01 · Query Solr by GET",
+          "id": "93253e39-8a85-4576-85e3-4d7ae2512c39",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/search/index/{{collection}}/{{requestHandler}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "search",
+                "index",
+                "{{collection}}",
+                "{{requestHandler}}"
+              ],
+              "query": []
+            },
+            "description": "SE01 · Query Solr by GET\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "User account",
+      "id": "67559781-e046-4a19-8d97-6e4033525310",
+      "item": [
+        {
+          "name": "US05 · Create user",
+          "id": "febd3929-4d40-4643-a6f3-b608e205877c",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user"
+              ],
+              "query": []
+            },
+            "description": "US05 · Create user\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "US08 · Get user by email",
+          "id": "587fca07-e77b-41de-862b-bc2246c2154a",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/email/{{email}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "email",
+                "{{email}}"
+              ],
+              "query": []
+            },
+            "description": "US08 · Get user by email\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "US02 · Get user info",
+          "id": "ff6dfd80-047d-482b-b1e8-38d1c2ddcdaf",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/info",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "info"
+              ],
+              "query": []
+            },
+            "description": "US02 · Get user info\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "US01 · Login user",
+          "id": "e3b19390-9f6c-4a79-8a28-44027e4543e3",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/login",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "login"
+              ],
+              "query": []
+            },
+            "description": "US01 · Login user\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "US04 · Get user organizations",
+          "id": "0ac47ea5-fa85-416b-af72-641069dbc128",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/organizations",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "organizations"
+              ],
+              "query": []
+            },
+            "description": "US04 · Get user organizations\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "US03 · Get user privileges",
+          "id": "aead615d-e8c1-44c0-ba6c-5af204584bcc",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/privileges",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "privileges"
+              ],
+              "query": []
+            },
+            "description": "US03 · Get user privileges\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "US14 · Get single global privilege",
+          "id": "634670b4-12a1-4dfa-9439-85afc64190e9",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/privileges/{{privilege}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "privileges",
+                "{{privilege}}"
+              ],
+              "query": []
+            },
+            "description": "US14 · Get single global privilege\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "US15 · Search for users",
+          "id": "081fdf33-3f0f-4c52-875f-1440da6da5eb",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/search",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "search"
+              ],
+              "query": []
+            },
+            "description": "US15 · Search for users\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "US12 · Update user's metadata",
+          "id": "429e8988-f2b0-4779-8e1d-4619f157c08c",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "US12 · Update user's metadata\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "US13 · Get user by id",
+          "id": "2237658f-1608-4cbd-bc92-785fa2eb41f5",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "US13 · Get user by id\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "US06 · Delete user",
+          "id": "11bbee18-2e6c-46b9-bb6f-533e04796ec9",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "US06 · Delete user\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "US07 · Confirm user action",
+          "id": "0356fbe0-502c-4eea-841e-d13413b762e1",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/{{id}}/confirm/{{token}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "{{id}}",
+                "confirm",
+                "{{token}}"
+              ],
+              "query": []
+            },
+            "description": "US07 · Confirm user action\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "US11 · Update user's email",
+          "id": "43ea7479-6e65-49ba-aa4a-6cf8bf28ad1e",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/{{id}}/email",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "{{id}}",
+                "email"
+              ],
+              "query": []
+            },
+            "description": "US11 · Update user's email\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "US09 · Change user password",
+          "id": "9bfa5453-c4cc-4110-9e33-0e6af3ecabb2",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/{{id}}/password",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "{{id}}",
+                "password"
+              ],
+              "query": []
+            },
+            "description": "US09 · Change user password\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "US10 · Reset user password",
+          "id": "7a860184-e8a1-40cc-813f-1711ac8a8aac",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/user/{{id}}/passwordreset",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "user",
+                "{{id}}",
+                "passwordreset"
+              ],
+              "query": []
+            },
+            "description": "US10 · Reset user password\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "Version",
+      "id": "ec923b53-2a68-4403-a41f-2ec1f4731632",
+      "item": [
+        {
+          "name": "VE01 · Show version",
+          "id": "23703a32-1f61-41e0-a9cf-f7d2a74f6915",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/version",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "version"
+              ],
+              "query": []
+            },
+            "description": "VE01 · Show version\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Auth",
+          "id": "62749fcb-083b-404b-8788-bccda2961b7c",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/version/test-auth",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "version",
+                "test-auth"
+              ],
+              "query": []
+            },
+            "description": "Test Auth\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        },
+        {
+          "name": "Test Bad Request",
+          "id": "cfe77995-5687-486f-bcf3-a37c9a6149ad",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{ddb_api}}/version/test-request/{{id}}",
+              "host": [
+                "{{ddb_api}}"
+              ],
+              "path": [
+                "version",
+                "test-request",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "Test Bad Request\n\nOpenAPI: https://api.deutsche-digitale-bibliothek.de/2/q/openapi"
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    }
+  ],
+  "variable": [
+    {
+      "key": "ddb_api",
+      "value": "https://api.deutsche-digitale-bibliothek.de/2",
+      "type": "string"
+    },
+    {
+      "key": "ddb_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "query",
+      "value": "Beodra",
+      "type": "string"
+    },
+    {
+      "key": "id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "collection",
+      "value": "search",
+      "type": "string"
+    },
+    {
+      "key": "requestHandler",
+      "value": "select",
+      "type": "string"
+    },
+    {
+      "key": "folderId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "bookmarkId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "email",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "privilege",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "Beodra",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "Barna",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "00",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "00Z",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "59",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "59Z",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,860 @@
+{
+  "info": {
+    "_postman_id": "1809fb08-5583-45eb-9b6f-d1b6b251a33b",
+    "name": "Europeana API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Europeana APIs (search, record, IIIF, entity, OAI-PMH) for 50M+ items from European archives, libraries and museums — including Europeana Newspapers. Get a free key at https://pro.europeana.eu/pages/get-api and set wskey. The public demo key api2demo works for testing (rate-limited).\n\nDocs: https://pro.europeana.eu/page/apis"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "wskey"
+      },
+      {
+        "key": "value",
+        "value": "{{wskey}}"
+      },
+      {
+        "key": "in",
+        "value": "query"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Search API",
+      "id": "8007318d-b925-460c-8a68-adca68ef8806",
+      "item": [
+        {
+          "name": "Search (keyword)",
+          "id": "d11c7973-ee44-4299-80b6-86841cfef184",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/record/v2/search.json?query={{query}}&rows=24",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "record",
+                "v2",
+                "search.json"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "{{query}}",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "rows",
+                  "value": "24",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "start",
+                  "value": "1",
+                  "disabled": true,
+                  "description": "1-based offset (max 1000 via start; use cursor beyond)"
+                },
+                {
+                  "key": "cursor",
+                  "value": "*",
+                  "disabled": true,
+                  "description": "Deep paging: * then nextCursor"
+                },
+                {
+                  "key": "profile",
+                  "value": "standard",
+                  "disabled": true,
+                  "description": "minimal | standard | rich | facets | breadcrumbs"
+                },
+                {
+                  "key": "qf",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Filter query, repeatable, e.g. TYPE:TEXT, COUNTRY:hungary, YEAR:[1880 TO 1910]"
+                },
+                {
+                  "key": "reusability",
+                  "value": "",
+                  "disabled": true,
+                  "description": "open | restricted | permission"
+                },
+                {
+                  "key": "media",
+                  "value": "",
+                  "disabled": true,
+                  "description": "true = only items with media"
+                },
+                {
+                  "key": "theme",
+                  "value": "",
+                  "disabled": true,
+                  "description": "e.g. newspaper, photography, maps"
+                },
+                {
+                  "key": "sort",
+                  "value": "",
+                  "disabled": true,
+                  "description": "e.g. score+desc, timestamp_update+desc"
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": "UI language for labels"
+                }
+              ]
+            },
+            "description": "Full-text-style search across 50M+ cultural heritage items. Lucene syntax supported (AND, OR, quotes, field:value)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=((j.items||[]).map(i=>({id:'<a href=\"'+(i.guid||'')+'\">'+i.id+'</a>',title:(i.title||[])[0],type:i.type,year:(i.year||[]).join(', '),provider:(i.dataProvider||[])[0],country:(i.country||[]).join(', ')})));",
+                  "const cols=[\"id\",\"title\",\"type\",\"year\",\"provider\",\"country\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search: Beodra (place)",
+          "id": "552341ca-43b2-4b39-8637-112b4c9372d1",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/record/v2/search.json?query=Beodra OR \"Novo Miloševo\" OR Bégafő&rows=50",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "record",
+                "v2",
+                "search.json"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "Beodra OR \"Novo Miloševo\" OR Bégafő",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "rows",
+                  "value": "50",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=((j.items||[]).map(i=>({id:'<a href=\"'+(i.guid||'')+'\">'+i.id+'</a>',title:(i.title||[])[0],type:i.type,year:(i.year||[]).join(', '),provider:(i.dataProvider||[])[0],country:(i.country||[]).join(', ')})));",
+                  "const cols=[\"id\",\"title\",\"type\",\"year\",\"provider\",\"country\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search: Vértessomló",
+          "id": "8dacdb49-97c9-4aeb-a8c0-3ae6042eca09",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/record/v2/search.json?query=Vértessomló OR \"Vertessomlo\" OR \"Somló\"&rows=50",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "record",
+                "v2",
+                "search.json"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "Vértessomló OR \"Vertessomlo\" OR \"Somló\"",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "rows",
+                  "value": "50",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=((j.items||[]).map(i=>({id:'<a href=\"'+(i.guid||'')+'\">'+i.id+'</a>',title:(i.title||[])[0],type:i.type,year:(i.year||[]).join(', '),provider:(i.dataProvider||[])[0],country:(i.country||[]).join(', ')})));",
+                  "const cols=[\"id\",\"title\",\"type\",\"year\",\"provider\",\"country\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search: Torontál newspapers 1880–1910",
+          "id": "7d5d9d2f-14d7-4c9b-aba4-ef0a830f525c",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/record/v2/search.json?query=Torontál OR Torontal&theme=newspaper&qf=YEAR:[1880 TO 1910]&rows=50",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "record",
+                "v2",
+                "search.json"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "Torontál OR Torontal",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "theme",
+                  "value": "newspaper",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "qf",
+                  "value": "YEAR:[1880 TO 1910]",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "rows",
+                  "value": "50",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Europeana Newspapers theme (many have full text)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=((j.items||[]).map(i=>({id:'<a href=\"'+(i.guid||'')+'\">'+i.id+'</a>',title:(i.title||[])[0],type:i.type,year:(i.year||[]).join(', '),provider:(i.dataProvider||[])[0],country:(i.country||[]).join(', ')})));",
+                  "const cols=[\"id\",\"title\",\"type\",\"year\",\"provider\",\"country\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search: surname Barna, Hungary, texts",
+          "id": "e81dfef4-7cca-413d-9f3b-16cfe18bb9bb",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/record/v2/search.json?query=Barna&qf=TYPE:TEXT&qf=COUNTRY:hungary&rows=50",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "record",
+                "v2",
+                "search.json"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "Barna",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "qf",
+                  "value": "TYPE:TEXT",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "qf",
+                  "value": "COUNTRY:hungary",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "rows",
+                  "value": "50",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=((j.items||[]).map(i=>({id:'<a href=\"'+(i.guid||'')+'\">'+i.id+'</a>',title:(i.title||[])[0],type:i.type,year:(i.year||[]).join(', '),provider:(i.dataProvider||[])[0],country:(i.country||[]).join(', ')})));",
+                  "const cols=[\"id\",\"title\",\"type\",\"year\",\"provider\",\"country\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search: Danube Swabians / Banat",
+          "id": "dd7d2024-2468-466f-9584-1a0f2ff05495",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/record/v2/search.json?query=\"Banat\" AND (Schwaben OR Swabian OR Donauschwaben)&rows=50",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "record",
+                "v2",
+                "search.json"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "\"Banat\" AND (Schwaben OR Swabian OR Donauschwaben)",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "rows",
+                  "value": "50",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=((j.items||[]).map(i=>({id:'<a href=\"'+(i.guid||'')+'\">'+i.id+'</a>',title:(i.title||[])[0],type:i.type,year:(i.year||[]).join(', '),provider:(i.dataProvider||[])[0],country:(i.country||[]).join(', ')})));",
+                  "const cols=[\"id\",\"title\",\"type\",\"year\",\"provider\",\"country\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search with facets (what is there?)",
+          "id": "1011122f-7393-45bb-a85d-dd5ae649f815",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/record/v2/search.json?query={{query}}&rows=0&profile=facets&facet=COUNTRY&facet=TYPE&facet=DATA_PROVIDER&facet=YEAR",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "record",
+                "v2",
+                "search.json"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "{{query}}",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "rows",
+                  "value": "0",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "profile",
+                  "value": "facets",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "facet",
+                  "value": "COUNTRY",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "facet",
+                  "value": "TYPE",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "facet",
+                  "value": "DATA_PROVIDER",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "facet",
+                  "value": "YEAR",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Counts by country, type, provider and year — use to decide where to look."
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "Record API",
+      "id": "12c1eaaf-4787-46b8-b63e-e7213b305ddf",
+      "item": [
+        {
+          "name": "Get record (JSON)",
+          "id": "091aae1c-a8c8-4f01-bda2-cb312f7e4f1a",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/record/v2/{{record_id}}.json",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "record",
+                "v2",
+                "{{record_id}}.json"
+              ],
+              "query": []
+            },
+            "description": "record_id is the Europeana id WITHOUT the leading slash, e.g. 1090/MNMMUSEUM1755457 (both parts)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get record (JSON-LD)",
+          "id": "69261fd6-1509-45d1-a230-ce0685794371",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/record/v2/{{record_id}}.json-ld",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "record",
+                "v2",
+                "{{record_id}}.json-ld"
+              ],
+              "query": []
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Get record (RDF/XML)",
+          "id": "5e186dc9-b1fa-4246-900e-7ed70ebf6754",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/record/v2/{{record_id}}.rdf",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "record",
+                "v2",
+                "{{record_id}}.rdf"
+              ],
+              "query": []
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "IIIF (images & newspaper full text)",
+      "id": "e0b070c5-ea4b-425c-bede-304c469a2c3f",
+      "item": [
+        {
+          "name": "IIIF manifest",
+          "id": "244aea50-903a-4e93-ae2b-624ee8b15fc2",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_iiif}}/presentation/{{record_id}}/manifest",
+              "host": [
+                "{{eu_iiif}}"
+              ],
+              "path": [
+                "presentation",
+                "{{record_id}}",
+                "manifest"
+              ],
+              "query": []
+            },
+            "description": "Open in Mirador / Universal Viewer.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Full-text search inside an item",
+          "id": "37553843-e8a0-423d-9caf-0f44ffd3e7ca",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_iiif}}/presentation/{{record_id}}/search?q={{query}}",
+              "host": [
+                "{{eu_iiif}}"
+              ],
+              "path": [
+                "presentation",
+                "{{record_id}}",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "{{query}}",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Works for newspapers/books that have full text.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "Entity API (places, people, concepts)",
+      "id": "d257e8e2-2b8b-4bda-ba13-1739583e4d16",
+      "item": [
+        {
+          "name": "Entity search",
+          "id": "4b0639d5-9686-439f-8bc1-d981b7d4fca8",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/entity/search?query={{query}}",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "entity",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "{{query}}",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "type",
+                  "value": "place",
+                  "disabled": true,
+                  "description": "agent | place | concept | timespan | organization"
+                },
+                {
+                  "key": "lang",
+                  "value": "en",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "pageSize",
+                  "value": "20",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Entity suggest (autocomplete)",
+          "id": "3ea4f593-deba-486d-96fa-df2e69c10366",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/entity/suggest?text={{query}}",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "entity",
+                "suggest"
+              ],
+              "query": [
+                {
+                  "key": "text",
+                  "value": "{{query}}",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "type",
+                  "value": "place",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Get place entity",
+          "id": "a516220a-351f-4c57-adc7-3d0fac41af6b",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/entity/place/base/{{entity_id}}.json",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "entity",
+                "place",
+                "base",
+                "{{entity_id}}.json"
+              ],
+              "query": []
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "Thumbnails & OAI-PMH",
+      "id": "ea294a31-904e-4bb3-a188-cc1660bdffe8",
+      "item": [
+        {
+          "name": "Thumbnail URL",
+          "id": "65c728a9-c700-445d-8236-66ad58ca2227",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/thumbnail/v3/400/{{thumb_hash}}",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "thumbnail",
+                "v3",
+                "400",
+                "{{thumb_hash}}"
+              ],
+              "query": []
+            },
+            "description": "Hash comes from edmPreview in search results.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "OAI-PMH Identify",
+          "id": "bd3c2db4-becf-46d4-952c-7c9ed02d758b",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/oai/record?verb=Identify",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "oai",
+                "record"
+              ],
+              "query": [
+                {
+                  "key": "verb",
+                  "value": "Identify",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "OAI-PMH ListSets",
+          "id": "85f0d628-32d5-4b12-a05e-26b17fc63565",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{eu_api}}/oai/record?verb=ListSets",
+              "host": [
+                "{{eu_api}}"
+              ],
+              "path": [
+                "oai",
+                "record"
+              ],
+              "query": [
+                {
+                  "key": "verb",
+                  "value": "ListSets",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    }
+  ],
+  "variable": [
+    {
+      "key": "eu_api",
+      "value": "https://api.europeana.eu",
+      "type": "string"
+    },
+    {
+      "key": "eu_iiif",
+      "value": "https://iiif.europeana.eu",
+      "type": "string"
+    },
+    {
+      "key": "wskey",
+      "value": "api2demo",
+      "type": "string"
+    },
+    {
+      "key": "query",
+      "value": "Beodra",
+      "type": "string"
+    },
+    {
+      "key": "record_id",
+      "value": "1090/MNMMUSEUM1755457",
+      "type": "string"
+    },
+    {
+      "key": "entity_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "thumb_hash",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "TEXT",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "hungary",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

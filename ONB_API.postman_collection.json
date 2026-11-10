@@ -1,0 +1,298 @@
+{
+  "info": {
+    "_postman_id": "a8873de5-0582-4b35-be9a-2fe717715ce5",
+    "name": "Austrian National Library (ÖNB) API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "ÖNB-API endpoints as documented at https://api.onb.ac.at/ (IIIF Presentation/Image/Search + raw REST/OCR). IDs must be taken from ONB viewer links. Note: ANNO (Austrian Newspapers Online) web pages sit behind a bot check and are not usable as an API; access requests: api@onb.ac.at. Not tested with live IDs at build time."
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "item": [
+    {
+      "name": "IIIF APIs (api.onb.ac.at)",
+      "id": "3388fa69-df85-4e3d-a31c-3947ee064a39",
+      "item": [
+        {
+          "name": "IIIF Presentation v3 — manifest",
+          "id": "0d7c8722-19a7-4e60-8397-7ecf0741b4f8",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onb_api}}/iiif/presentation/v3/{{manifest_path}}",
+              "host": [
+                "{{onb_api}}"
+              ],
+              "path": [
+                "iiif",
+                "presentation",
+                "v3",
+                "{{manifest_path}}"
+              ],
+              "query": []
+            },
+            "description": "Documented base path /iiif/presentation/v3. The object path/ID comes from the ONB viewer (digital.onb.ac.at); format is not published, so copy it from a viewer link."
+          },
+          "response": []
+        },
+        {
+          "name": "IIIF Image v3 — info.json",
+          "id": "615d27c5-e520-4215-adb3-3d6ee1965eac",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onb_api}}/iiif/image/v3/{{image_id}}/info.json",
+              "host": [
+                "{{onb_api}}"
+              ],
+              "path": [
+                "iiif",
+                "image",
+                "v3",
+                "{{image_id}}",
+                "info.json"
+              ],
+              "query": []
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "IIIF Image v3 — full image",
+          "id": "1e29b5f1-efaa-441f-a68c-6bd8a514b35d",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onb_api}}/iiif/image/v3/{{image_id}}/full/max/0/default.jpg",
+              "host": [
+                "{{onb_api}}"
+              ],
+              "path": [
+                "iiif",
+                "image",
+                "v3",
+                "{{image_id}}",
+                "full",
+                "max",
+                "0",
+                "default.jpg"
+              ],
+              "query": []
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "IIIF Content Search v2",
+          "id": "1b9e3bcc-106b-4017-a155-e998b1767c00",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onb_api}}/iiif/search/v2/{{manifest_path}}?q={{query}}",
+              "host": [
+                "{{onb_api}}"
+              ],
+              "path": [
+                "iiif",
+                "search",
+                "v2",
+                "{{manifest_path}}"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "{{query}}",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "Raw REST v1 (by intellectual-entity id)",
+      "id": "f38d6055-e985-48df-9191-4eea648e06ea",
+      "item": [
+        {
+          "name": "File",
+          "id": "5b783b5f-f337-4f41-9844-a6be27eb8bdf",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onb_api}}/rest/v1/ie/{{ieId}}/file/{{fileName}}",
+              "host": [
+                "{{onb_api}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "ie",
+                "{{ieId}}",
+                "file",
+                "{{fileName}}"
+              ],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "text",
+                  "disabled": true,
+                  "description": "text view for PAGE_COORDOCR files"
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "OCR page (ALTO XML)",
+          "id": "65d8101d-2897-4edf-8f75-6813f35f3d74",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onb_api}}/rest/v1/ie/{{ieId}}/alto/{{pageNumber}}",
+              "host": [
+                "{{onb_api}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "ie",
+                "{{ieId}}",
+                "alto",
+                "{{pageNumber}}"
+              ],
+              "query": []
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "OCR page (plain text)",
+          "id": "94613aef-4560-4195-9df2-a5ac18fdf612",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onb_api}}/rest/v1/ie/{{ieId}}/txt/{{pageNumber}}",
+              "host": [
+                "{{onb_api}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "ie",
+                "{{ieId}}",
+                "txt",
+                "{{pageNumber}}"
+              ],
+              "query": []
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Preview image",
+          "id": "6fe9d878-7977-40c2-be33-a5762418ff95",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onb_api}}/rest/v1/ie/{{ieId}}/preview",
+              "host": [
+                "{{onb_api}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "ie",
+                "{{ieId}}",
+                "preview"
+              ],
+              "query": []
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Thumbnail",
+          "id": "12b53d99-5ff3-4e17-9b16-d68bd071c33b",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{onb_api}}/rest/v1/ie/{{ieId}}/thumbnail",
+              "host": [
+                "{{onb_api}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "ie",
+                "{{ieId}}",
+                "thumbnail"
+              ],
+              "query": []
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    }
+  ],
+  "variable": [
+    {
+      "key": "onb_api",
+      "value": "https://api.onb.ac.at",
+      "type": "string"
+    },
+    {
+      "key": "manifest_path",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "image_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ieId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "fileName",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "pageNumber",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "query",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

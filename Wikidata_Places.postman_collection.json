@@ -1,0 +1,525 @@
+{
+  "info": {
+    "_postman_id": "1a236274-252f-4395-a4ab-0fef02368807",
+    "name": "Wikidata (genealogy place-name toolkit)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Wikidata MediaWiki API + SPARQL for resolving historic Central/Eastern European place names (Hungarian ↔ German ↔ Serbian/Romanian/Slovak), administrative history and nearby parishes. No key needed. Please keep the User-Agent descriptive.\n\nSPARQL endpoint: https://query.wikidata.org/sparql"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.request.headers.upsert({key:'User-Agent',value:'GenealogyPostman/1.0 (https://github.com/mikeyeves/uropean-Archives-APIs-Postman)'});"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Entity lookup (MediaWiki API)",
+      "id": "a95a0f08-37bd-4141-8262-63c30966ee91",
+      "item": [
+        {
+          "name": "Search entities: Beodra",
+          "id": "266ff39b-84d4-49e7-825a-aaf30d85b67e",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{wd_api}}/w/api.php?action=wbsearchentities&search={{search}}&language=en&uselang=en&type=item&limit=20&format=json",
+              "host": [
+                "{{wd_api}}"
+              ],
+              "path": [
+                "w",
+                "api.php"
+              ],
+              "query": [
+                {
+                  "key": "action",
+                  "value": "wbsearchentities",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "search",
+                  "value": "{{search}}",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "language",
+                  "value": "en",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "uselang",
+                  "value": "en",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "type",
+                  "value": "item",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "format",
+                  "value": "json",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Verified: Beodra → Q12748850 (settlement in Serbia); Novo Miloševo → Q793176."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=((j.search||[]).map(s=>({id:'<a href=\"https://www.wikidata.org/wiki/'+s.id+'\">'+s.id+'</a>',label:s.label,description:s.description})));",
+                  "const cols=[\"id\",\"label\",\"description\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get entity (labels, aliases, claims)",
+          "id": "3eeb8b8a-e374-451d-b5b7-c2070d86c633",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{wd_api}}/w/api.php?action=wbgetentities&ids={{place_qid}}&props=labels|aliases|descriptions|claims|sitelinks&languages=en|hu|de|sr|ro|sk&format=json",
+              "host": [
+                "{{wd_api}}"
+              ],
+              "path": [
+                "w",
+                "api.php"
+              ],
+              "query": [
+                {
+                  "key": "action",
+                  "value": "wbgetentities",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "ids",
+                  "value": "{{place_qid}}",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "props",
+                  "value": "labels|aliases|descriptions|claims|sitelinks",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "languages",
+                  "value": "en|hu|de|sr|ro|sk",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "format",
+                  "value": "json",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": ""
+          },
+          "response": []
+        },
+        {
+          "name": "Entity data (raw JSON)",
+          "id": "7d81fbdc-8737-48d6-a985-56798447be7e",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{wd_www}}/wiki/Special:EntityData/{{place_qid}}.json",
+              "host": [
+                "{{wd_www}}"
+              ],
+              "path": [
+                "wiki",
+                "Special:EntityData",
+                "{{place_qid}}.json"
+              ],
+              "query": []
+            },
+            "description": ""
+          },
+          "response": []
+        }
+      ],
+      "description": ""
+    },
+    {
+      "name": "SPARQL (place-name toolkit)",
+      "id": "02f47f26-f0e9-40ca-9485-9799d1a6bc1d",
+      "item": [
+        {
+          "name": "Place names in all regional languages",
+          "id": "2c09c512-8611-431e-a1d8-ca9c3b8635b3",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/sparql-results+json"
+              }
+            ],
+            "url": {
+              "raw": "{{wd_sparql}}?format=json&query=SELECT ?lang ?name WHERE { VALUES ?item { wd:{{place_qid}} } { ?item rdfs:label ?name } UNION { ?item skos:altLabel ?name } BIND(LANG(?name) AS ?lang) FILTER(?lang IN (\"en\",\"hu\",\"de\",\"sr\",\"sr-el\",\"ro\",\"sk\",\"hr\")) } ORDER BY ?lang",
+              "host": [
+                "{{wd_sparql}}"
+              ],
+              "path": [
+                ""
+              ],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "json",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "query",
+                  "value": "SELECT ?lang ?name WHERE { VALUES ?item { wd:{{place_qid}} } { ?item rdfs:label ?name } UNION { ?item skos:altLabel ?name } BIND(LANG(?name) AS ?lang) FILTER(?lang IN (\"en\",\"hu\",\"de\",\"sr\",\"sr-el\",\"ro\",\"sk\",\"hr\")) } ORDER BY ?lang",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Hungarian / German / Serbian / Romanian names for one place."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=(((j.results||{}).bindings||[]).map(b=>Object.fromEntries(Object.entries(b).map(([k,v])=>[k,v.value]))));",
+                  "const cols=[\"lang\",\"name\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Administrative history (county, country, dates)",
+          "id": "6eb49923-35e0-4ee3-ae5b-847aa9262a84",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/sparql-results+json"
+              }
+            ],
+            "url": {
+              "raw": "{{wd_sparql}}?format=json&query=SELECT ?unit ?unitLabel ?start ?end WHERE { wd:{{place_qid}} p:P131 ?st . ?st ps:P131 ?unit . OPTIONAL { ?st pq:P580 ?start } OPTIONAL { ?st pq:P582 ?end } SERVICE wikibase:label { bd:serviceParam wikibase:language \"en,hu,de\". } } ORDER BY ?start",
+              "host": [
+                "{{wd_sparql}}"
+              ],
+              "path": [
+                ""
+              ],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "json",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "query",
+                  "value": "SELECT ?unit ?unitLabel ?start ?end WHERE { wd:{{place_qid}} p:P131 ?st . ?st ps:P131 ?unit . OPTIONAL { ?st pq:P580 ?start } OPTIONAL { ?st pq:P582 ?end } SERVICE wikibase:label { bd:serviceParam wikibase:language \"en,hu,de\". } } ORDER BY ?start",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Which county/state a place belonged to over time (P131 with start/end qualifiers)."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=(((j.results||{}).bindings||[]).map(b=>Object.fromEntries(Object.entries(b).map(([k,v])=>[k,v.value]))));",
+                  "const cols=[\"unit\",\"unitLabel\",\"start\",\"end\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Find a place by its Hungarian/German name (any country)",
+          "id": "6aaa3153-ab74-454d-a881-9ac76a82d6e5",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/sparql-results+json"
+              }
+            ],
+            "url": {
+              "raw": "{{wd_sparql}}?format=json&query=SELECT ?place ?placeLabel ?hu ?de ?countryLabel WHERE { SERVICE wikibase:mwapi { bd:serviceParam wikibase:endpoint \"www.wikidata.org\"; wikibase:api \"EntitySearch\"; mwapi:search \"{{name_fragment}}\"; mwapi:language \"hu\". ?place wikibase:apiOutputItem mwapi:item. } OPTIONAL { ?place rdfs:label ?hu FILTER(LANG(?hu)=\"hu\") } OPTIONAL { ?place rdfs:label ?de FILTER(LANG(?de)=\"de\") } OPTIONAL { ?place wdt:P17 ?country } SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } } LIMIT 30",
+              "host": [
+                "{{wd_sparql}}"
+              ],
+              "path": [
+                ""
+              ],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "json",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "query",
+                  "value": "SELECT ?place ?placeLabel ?hu ?de ?countryLabel WHERE { SERVICE wikibase:mwapi { bd:serviceParam wikibase:endpoint \"www.wikidata.org\"; wikibase:api \"EntitySearch\"; mwapi:search \"{{name_fragment}}\"; mwapi:language \"hu\". ?place wikibase:apiOutputItem mwapi:item. } OPTIONAL { ?place rdfs:label ?hu FILTER(LANG(?hu)=\"hu\") } OPTIONAL { ?place rdfs:label ?de FILTER(LANG(?de)=\"de\") } OPTIONAL { ?place wdt:P17 ?country } SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". } } LIMIT 30",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Search Wikidata by an old Hungarian or German place name (e.g. Beodra, Nagybecskerek, Werschetz) and get the modern country."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=(((j.results||{}).bindings||[]).map(b=>Object.fromEntries(Object.entries(b).map(([k,v])=>[k,v.value]))));",
+                  "const cols=[\"place\",\"placeLabel\",\"hu\",\"de\",\"coord\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Villages within N km (neighbouring parishes)",
+          "id": "33a3414c-99ab-4222-9ff1-71e9a7d1bf4c",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/sparql-results+json"
+              }
+            ],
+            "url": {
+              "raw": "{{wd_sparql}}?format=json&query=SELECT ?other ?otherLabel ?dist WHERE { wd:{{place_qid}} wdt:P625 ?c . SERVICE wikibase:around { ?other wdt:P625 ?loc . bd:serviceParam wikibase:center ?c ; wikibase:radius \"{{radius_km}}\" . bd:serviceParam wikibase:distance ?dist . } ?other wdt:P31 ?type . VALUES ?type { wd:Q532 wd:Q3957 wd:Q486972 wd:Q1529096 wd:Q15715406 } SERVICE wikibase:label { bd:serviceParam wikibase:language \"en,hu,de,sr\". } } ORDER BY ?dist LIMIT 60",
+              "host": [
+                "{{wd_sparql}}"
+              ],
+              "path": [
+                ""
+              ],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "json",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "query",
+                  "value": "SELECT ?other ?otherLabel ?dist WHERE { wd:{{place_qid}} wdt:P625 ?c . SERVICE wikibase:around { ?other wdt:P625 ?loc . bd:serviceParam wikibase:center ?c ; wikibase:radius \"{{radius_km}}\" . bd:serviceParam wikibase:distance ?dist . } ?other wdt:P31 ?type . VALUES ?type { wd:Q532 wd:Q3957 wd:Q486972 wd:Q1529096 wd:Q15715406 } SERVICE wikibase:label { bd:serviceParam wikibase:language \"en,hu,de,sr\". } } ORDER BY ?dist LIMIT 60",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "Nearby settlements — useful for finding the parish that covered a filial village."
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "let j={};try{j=pm.response.json();}catch(e){}",
+                  "const rows=(((j.results||{}).bindings||[]).map(b=>Object.fromEntries(Object.entries(b).map(([k,v])=>[k,v.value]))));",
+                  "const cols=[\"other\",\"otherLabel\",\"dist\"];",
+                  "pm.visualizer.set(`<style>table{border-collapse:collapse;font:13px sans-serif}td,th{border:1px solid #ccc;padding:4px 8px;vertical-align:top}th{background:#eee}</style><p>{{rows.length}} rows</p><table><tr>{{#each cols}}<th>{{this}}</th>{{/each}}</tr>{{#each rows}}<tr>{{#each this}}<td>{{{this}}}</td>{{/each}}</tr>{{/each}}</table>`,{rows:rows.map(r=>cols.map(c=>r[c]==null?'':String(r[c]))),cols});"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "description": ""
+    }
+  ],
+  "variable": [
+    {
+      "key": "wd_api",
+      "value": "https://www.wikidata.org",
+      "type": "string"
+    },
+    {
+      "key": "wd_www",
+      "value": "https://www.wikidata.org",
+      "type": "string"
+    },
+    {
+      "key": "wd_sparql",
+      "value": "https://query.wikidata.org/sparql",
+      "type": "string"
+    },
+    {
+      "key": "search",
+      "value": "Beodra",
+      "type": "string"
+    },
+    {
+      "key": "place_qid",
+      "value": "Q793176",
+      "type": "string"
+    },
+    {
+      "key": "name_fragment",
+      "value": "Beodra",
+      "type": "string"
+    },
+    {
+      "key": "radius_km",
+      "value": "15",
+      "type": "string"
+    },
+    {
+      "key": "EntityData",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "label",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "altLabel",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "P131",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "P580",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "P582",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "serviceParam",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "language",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "P31",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "P279",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "Q486972",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "P17",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "Q403",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "P625",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "around",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "center",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "radius",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "distance",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
