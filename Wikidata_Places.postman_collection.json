@@ -14,7 +14,7 @@
       "script": {
         "type": "text/javascript",
         "exec": [
-          "pm.request.headers.upsert({key:'User-Agent',value:'GenealogyPostman/1.0 (https://github.com/mikeyeves/uropean-Archives-APIs-Postman)'});"
+          "pm.request.headers.upsert({key:'User-Agent',value:'GenealogyPostman/1.0 (https://github.com/mikeyeves/European-Archives-APIs-Postman)'});"
         ]
       }
     }

@@ -4,10 +4,10 @@ Postman (v2.1) collections for public APIs that help with **Central and Eastern 
 
 | Collection | Requests | Key needed? | Use it for | Import link |
 |---|---|---|---|---|
-| **Europeana API** | 18 | Free key (`api2demo` demo key works) | 50M+ items from European archives, libraries and museums, incl. Europeana Newspapers, IIIF and full text | `https://raw.githubusercontent.com/mikeyeves/uropean-Archives-APIs-Postman/main/Europeana_API.postman_collection.json` |
-| **Deutsche Digitale Bibliothek (DDB) API** | 58 | Search: no key needed. User endpoints: key | German Digital Library plus the **German Newspaper Portal full-text index**, which includes German-language papers from Austria-Hungary | `https://raw.githubusercontent.com/mikeyeves/uropean-Archives-APIs-Postman/main/DDB_API.postman_collection.json` |
-| **Wikidata (place-name toolkit)** | 7 | No | Resolving historic place names: Hungarian ↔ German ↔ Serbian/Romanian/Slovak. Also administrative history and nearby villages/parishes | `https://raw.githubusercontent.com/mikeyeves/uropean-Archives-APIs-Postman/main/Wikidata_Places.postman_collection.json` |
-| **Austrian National Library (ÖNB) API** | 9 | No (IDs from ONB viewer) | IIIF manifests, images and OCR text from ÖNB digital collections | `https://raw.githubusercontent.com/mikeyeves/uropean-Archives-APIs-Postman/main/ONB_API.postman_collection.json` |
+| **Europeana API** | 18 | Free key (`api2demo` demo key works) | 50M+ items from European archives, libraries and museums, incl. Europeana Newspapers, IIIF and full text | `https://raw.githubusercontent.com/mikeyeves/European-Archives-APIs-Postman/main/Europeana_API.postman_collection.json` |
+| **Deutsche Digitale Bibliothek (DDB) API** | 58 | Search: no key needed. User endpoints: key | German Digital Library plus the **German Newspaper Portal full-text index**, which includes German-language papers from Austria-Hungary | `https://raw.githubusercontent.com/mikeyeves/European-Archives-APIs-Postman/main/DDB_API.postman_collection.json` |
+| **Wikidata (place-name toolkit)** | 7 | No | Resolving historic place names: Hungarian ↔ German ↔ Serbian/Romanian/Slovak. Also administrative history and nearby villages/parishes | `https://raw.githubusercontent.com/mikeyeves/European-Archives-APIs-Postman/main/Wikidata_Places.postman_collection.json` |
+| **Austrian National Library (ÖNB) API** | 9 | No (IDs from ONB viewer) | IIIF manifests, images and OCR text from ÖNB digital collections | `https://raw.githubusercontent.com/mikeyeves/European-Archives-APIs-Postman/main/ONB_API.postman_collection.json` |
 
 Import any collection with Postman → Import → Link. No environment file is needed; settings are collection variables.
 
